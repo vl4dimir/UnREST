@@ -1,0 +1,137 @@
+UnREST
+======
+
+UnREST is a simple library for Cocoa Touch devices (iPhone, iPad, iPod Touch) that simplifies the retrieval (HTTP GET) and posting (HTTP POST) of data to a RESTful web service. At its core, it is a lightweight wrapper around Apple's NSURLConnection class.
+
+Without UnREST, you have to construct the HTTP request by hand, taking care of all the header fields and the HTTP request format. UnREST aims to make this process as easy as possible.
+
+
+USAGE
+=====
+
+You need to either:
+
+1. Add the UnREST.xcodeproj as a project dependency to your project
+   - Drag the UnREST.xcodeproj file to your project's "Groups & Files" pane. Do not check the "Copy items into destination's group folder", since we want to add the project by reference
+   - Expand the tree for the UnREST.xcodeproj file you just added to the "Groups & Files" pane, and drag the libUnREST.a file to your target's "Link Binary With Libraries" build stage.
+   - Drag the UnREST.h file to your project's "Groups & Files" pane
+   - Import the UnREST.h file where needed
+   - When you set up your project in this way, as soon as I update the library here on github, you can pull the changes into your local UnREST repository, and all your projects that are using this library will be updated with a new version.
+
+or
+
+2. Simply copy Unrest.h and UnREST.m to your project and use them. This is a quick and dirty way to just make it work.
+
+For each of the following examples, you need to define your class as a delegate for UnRESTDelegate, and implement the following delegate methods for handling successful and unsuccessful retrieval (similar to the way NSURLConnection works):
+
+  - (void) unrest:(UnREST*)unrest didFinishWithResponse:(NSData*)response
+  {
+      // ... handle your response
+      [unrest release];
+  }
+
+  - (void) unrest:(UnREST*)unrest didFailWithError:(NSError*)error
+  {
+      // ... handle the error
+      [unrest release];
+  }
+
+
+Basic HTTP GET request from a URL
+---------------------------------
+
+Pulling data from a URL is very straightforward:
+
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
+  unrest.delegate = self;
+  [unrest pull];
+
+
+Basic HTTP POST - string
+------------------------
+
+Posting strings to a URL is also very easy:
+
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
+  unrest.delegate = self;
+  [unrest pushString:@"your POST string"];
+
+For example, I use this regularly to send JSON data to a server. The type of text depends on your web service, of course.
+
+
+Multipart HTTP POST to a URL - the quick way
+--------------------------------------------
+
+Performing multipart POST requests is the main reason I wrote this library. Using this technique allows you to emulate a typical web form POST, directly from your Cocoa Touch device. Currently there are "quick" methods for adding text and image parts.
+
+  NSString* text = @"your text here (could be JSON data, for example)";
+  UIImage* image = [UIImage imageNamed:@"yourimage.png"];
+
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
+  unrest.delegate = self;
+  [unrest addTextPart:text name:@"yourtextname"];
+  [unrest addImagePart:task.photo name:@"yourimagename"];
+  [unrest pushParts];
+
+The name parameter is used in the Content-Disposition header, which your web server uses to differentiate among the various form parts.
+
+
+Multipart HTTP POST to a URL - the real way
+-------------------------------------------
+
+This technique allows for finest level of control over your request, but it is the longest to write. ;) You need to create a dictionary for each part of your multipart message, and then pass those dictionaries to the sendMultipart: method. (The convenience methods mentioned previously all use this method internally.)
+
+Learning by example:
+
+  UIImage* image = [UIImage imageNamed:@"yourimage.png"];
+  CGFloat jpegQuality = kUnRESTJPEGQuality; // or use your own
+  NSData* jpegImage = UIImageJPEGRepresentation(image, jpegQuality);
+
+  NSData* pdfData = [NSData dataWithContentsOfFile:@"path/to/your/PDF/file.pdf"];
+
+  NSDictionary* textPart = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"yourTextPartName", kUnRESTMultipartName,
+                            [@"your text data" dataUsingEncoding:NSUTF8StringEncoding], kUnRESTMultipartContent,
+                            kUnRESTContentTypePlain, kUnRESTMultipartType,
+                            nil];
+
+  NSDictionary* imagePart = [NSDictionary dictionaryWithObjectsAndKeys:
+                             @"yourImagePartName", kUnRESTMultipartName,
+                             jpegImage, kUnRESTMultipartContent,
+                             kUnRESTContentTypeImageJPEG, kUnRESTMultipartType,
+                             @"myimage.jpg", kUnRESTMultipartFilename,
+                             nil];
+
+  NSDictionary* pdfPart = [NSDictionary dictionaryWithObjectsAndKeys:
+                           @"yourPDFPartName", kUnRESTMultipartName,
+                           pdfData, kUnRESTMultipartContent,
+                           @"application/pdf", kUnRESTMultipartType,
+                           @"myReport.pdf", kUnRESTMultipartFilename,
+                           nil];
+
+  NSArray* parts = [NSArray arrayWithObjects: textPart, imagePart, pdfPart, nil];
+
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
+  unrest.delegate = self;
+  [unrest pushMultipart:parts];
+
+The various types of keys you can add to the dictionary are described in UnREST.m, in the documentation for the pushMultipart: method. The keys are defined in UnREST.h, of course.
+
+Here we used three parts, with the third part being a PDF file. We specified "application/pdf" as the part type, letting our server know about the type of content we sent.
+
+You can put any kind of binary data into the dictionary; as long as you specify the correct type for the kUnRESTMultipartType key (which maps directly to the HTTP Content-Type header), your web server will interpret it correctly.
+
+
+FURTHER INFO
+============
+
+The comments in the UnREST.m file should clarify all your questions. ;) If you want to see the actual format of the HTTP request coming out of your device, you can use Wireshark or some other packet sniffer to inspect it.
+
+Feel free to fork this project, hack on it, and notify me of any changes you make. I'll gladly add them to the main tree. I can't possibly think of all the scenarios people might want to use this library in, so please go ahead and hack! :)
+
+
+TODO
+====
+
+- add more convenience methods (like -addBinaryPart:type:name:filename:)
+- write a test suite
