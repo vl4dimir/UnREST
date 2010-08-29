@@ -52,8 +52,7 @@ Basic HTTP POST - string
 
 Posting strings to a URL is also very easy:
 
-  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
-  unrest.delegate = self;
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource" delegate:self];
   [unrest pushString:@"your POST string"];
 
 For example, I use this regularly to send JSON data to a server. The type of text depends on your web service, of course.
@@ -67,8 +66,7 @@ Performing multipart POST requests is the main reason I wrote this library. Usin
   NSString* text = @"your text here (could be JSON data, for example)";
   UIImage* image = [UIImage imageNamed:@"yourimage.png"];
 
-  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
-  unrest.delegate = self;
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource" delegate:self];
   [unrest addTextPart:text name:@"yourtextname"];
   [unrest addImagePart:task.photo name:@"yourimagename"];
   [unrest pushParts];
@@ -111,8 +109,7 @@ Learning by example:
 
   NSArray* parts = [NSArray arrayWithObjects: textPart, imagePart, pdfPart, nil];
 
-  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
-  unrest.delegate = self;
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource" delegate:self];
   [unrest pushMultipart:parts];
 
 The various types of keys you can add to the dictionary are described in UnREST.m, in the documentation for the pushMultipart: method. The keys are defined in UnREST.h, of course.
