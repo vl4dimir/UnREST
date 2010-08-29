@@ -5,8 +5,6 @@
 
 #import "UnREST.h"
 
-#define kUnRESTBoundary @"----UnR3ST"
-
 #pragma mark -
 #pragma mark Private declarations
 
@@ -34,10 +32,11 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (id) initWithURLString:(NSString*)urlStr
+- (id) initWithURLString:(NSString*)urlStr delegate:(id<UnRESTDelegate>)del
 {
 	if (self = [super init]) {
 		self.urlString = urlStr;
+		self.delegate = del;
 	}
 	
 	return self;

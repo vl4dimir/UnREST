@@ -3,6 +3,8 @@
 //  UnREST
 //
 
+#define kUnRESTBoundary @"----UnR3ST"
+
 #define kUnRESTMultipartName @"name"
 #define kUnRESTMultipartType @"type"
 #define kUnRESTMultipartContent @"content"
@@ -28,7 +30,7 @@
 @property (nonatomic, retain) NSString* urlString;
 @property (nonatomic, assign) id<UnRESTDelegate> delegate;
 
-- (id) initWithURLString:(NSString*)urlString;
+- (id) initWithURLString:(NSString*)urlString delegate:(id<UnRESTDelegate>)delegate;
 - (void) pull;
 - (void) pushString:(NSString *)string;
 - (void) pushMultipart:(NSArray*)parts;
