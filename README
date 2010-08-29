@@ -42,8 +42,7 @@ Basic HTTP GET request from a URL
 
 Pulling data from a URL is very straightforward:
 
-  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource"];
-  unrest.delegate = self;
+  UnREST* unrest = [[UnREST alloc] initWithURLString:@"http://yourhost.com/your/resource" delegate:self];
   [unrest pull];
 
 
