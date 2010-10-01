@@ -3,24 +3,22 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		AA747D9F0F9514B9006C5449 /* UnREST_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* UnREST_Prefix.pch */; };
-		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 		C1FE1248121E7CD700E1D862 /* UnREST.h in Headers */ = {isa = PBXBuildFile; fileRef = C1FE1246121E7CD700E1D862 /* UnREST.h */; };
 		C1FE1249121E7CD700E1D862 /* UnREST.m in Sources */ = {isa = PBXBuildFile; fileRef = C1FE1247121E7CD700E1D862 /* UnREST.m */; };
-		C1FE1258121E7FAA00E1D862 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FE1257121E7FAA00E1D862 /* UIKit.framework */; };
+		E798CB411256190E00CE2E9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E798CB401256190E00CE2E9D /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AA747D9E0F9514B9006C5449 /* UnREST_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnREST_Prefix.pch; sourceTree = SOURCE_ROOT; };
-		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C1FE1246121E7CD700E1D862 /* UnREST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnREST.h; sourceTree = "<group>"; };
 		C1FE1247121E7CD700E1D862 /* UnREST.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnREST.m; sourceTree = "<group>"; };
-		C1FE1257121E7FAA00E1D862 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libUnREST.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnREST.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E798CB401256190E00CE2E9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,8 +26,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
-				C1FE1258121E7FAA00E1D862 /* UIKit.framework in Frameworks */,
+				E798CB411256190E00CE2E9D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,8 +55,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
-				C1FE1257121E7FAA00E1D862 /* UIKit.framework */,
+				E798CB401256190E00CE2E9D /* Foundation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -122,8 +118,15 @@
 				ORGANIZATIONNAME = vl4dimir;
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "UnREST" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* UnREST */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
@@ -188,7 +191,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 			};
 			name = Debug;
 		};
