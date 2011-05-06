@@ -13,7 +13,7 @@
 #define kUnRESTContentTypePlain @"text/plain"
 #define kUnRESTContentTypeImageJPEG @"image/jpeg"
 
-#define kUnRESTJPEGQuality 0.8
+#define kUnRESTJPEGQuality 0.8f
 
 @protocol UnRESTDelegate;
 
@@ -30,14 +30,17 @@
 @property (nonatomic, retain) NSString* urlString;
 @property (nonatomic, assign) id<UnRESTDelegate> delegate;
 
++ (UnREST*) unrestWithURLString:(NSString*)urlString delegate:(id<UnRESTDelegate>)delegate;
 - (id) initWithURLString:(NSString*)urlString delegate:(id<UnRESTDelegate>)delegate;
-- (void) pull;
-- (void) pushString:(NSString *)string;
-- (void) pushMultipart:(NSArray*)parts;
+- (void) get;
+- (void) sendString:(NSString*)string withHttpMethod:(NSString*)method;
+- (void) putString:(NSString*)string;
+- (void) postString:(NSString*)string;
+- (void) postMultipart:(NSArray*)parts;
 
 - (void) addTextPart:(NSString*)text name:(NSString*)name;
 - (void) addImagePart:(UIImage*)image name:(NSString*)name;
-- (void) pushParts;
+- (void) postParts;
 
 @end
 

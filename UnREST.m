@@ -32,9 +32,12 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (id) initWithURLString:(NSString*)urlStr delegate:(id<UnRESTDelegate>)del
-{
-	if (self = [super init]) {
++ (UnREST*) unrestWithURLString:(NSString*)urlString delegate:(id<UnRESTDelegate>)delegate {
+	return [[[self alloc] initWithURLString:urlString delegate:delegate] autorelease];
+}
+
+- (id) initWithURLString:(NSString*)urlStr delegate:(id<UnRESTDelegate>)del {
+	if ((self = [super init])) {
 		self.urlString = urlStr;
 		self.delegate = del;
 	}
@@ -49,8 +52,7 @@
 /**
  * Performs an HTTP GET request.
  */
-- (void) pull
-{
+- (void) get {
 	self.responseData = [NSMutableData data];
 	
 	NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
@@ -59,15 +61,15 @@
 }
 
 /**
- * Performs an HTTP POST request, using string as payload.
- * 
- * @param string POST request payload.
+ * Helper method, sends the string using a given HTTP method.
+ *
+ * @param string request payload
+ * @param method HTTP method to use ("POST", "PUT")
  */
-- (void) pushString:(NSString *)string
-{
+- (void) sendString:(NSString*)string withHttpMethod:(NSString*)method {
 	// Construct the URL request object
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-	[request setHTTPMethod:@"POST"];
+	[request setHTTPMethod:method];
 	[request setHTTPBody:[string dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	// Create our response placeholder
@@ -76,6 +78,24 @@
 	// Go
 	self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
 	[connection start];
+}
+
+/**
+ * Performs an HTTP PUT request, using string as payload.
+ * 
+ * @param string PUT request payload.
+ */
+- (void) putString:(NSString*)string {
+	[self sendString:string withHttpMethod:@"PUT"];
+}
+
+/**
+ * Performs an HTTP POST request, using string as payload.
+ * 
+ * @param string POST request payload.
+ */
+- (void) postString:(NSString *)string {
+	[self sendString:string withHttpMethod:@"POST"];
 }
 
 /**
@@ -100,8 +120,7 @@
  * 
  * @param parts An array holding data for the POST multipart request
  */
-- (void) pushMultipart:(NSArray*)parts
-{
+- (void) postMultipart:(NSArray*)parts {
 	// Construct the URL request object
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
 	[request setHTTPMethod:@"POST"];
@@ -134,7 +153,7 @@
 		[postBody appendData:[contentDisposition dataUsingEncoding:NSUTF8StringEncoding]];
 		
 		// Set content type
-		NSString* contentType = [NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", type];
+		contentType = [NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", type];
 		[postBody appendData:[contentType dataUsingEncoding:NSUTF8StringEncoding]];
 		
 		// Set the actual content
@@ -159,8 +178,7 @@
 #pragma mark -
 #pragma mark Multipart packing methods
 
-- (void) addTextPart:(NSString*)text name:(NSString*)name
-{
+- (void) addTextPart:(NSString*)text name:(NSString*)name {
 	if (!multiparts) self.multiparts = [NSMutableArray array];
 	
 	NSDictionary* part = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -172,8 +190,7 @@
 	[multiparts addObject:part];
 }
 
-- (void) addImagePart:(UIImage*)image name:(NSString*)name
-{
+- (void) addImagePart:(UIImage*)image name:(NSString*)name {
 	if (!multiparts) self.multiparts = [NSMutableArray array];
 	
 	NSData* jpegImage = UIImageJPEGRepresentation(image, kUnRESTJPEGQuality);
@@ -189,22 +206,19 @@
 	[multiparts addObject:part];
 }
 
-- (void) pushParts
-{
-	[self pushMultipart:multiparts];
+- (void) postParts {
+	[self postMultipart:multiparts];
 }
 
 
 #pragma mark -
 #pragma mark NSURLConnection delegate methods
 
-- (void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data
-{
+- (void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
 	[responseData appendData:data];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)conn
-{
+- (void)connectionDidFinishLoading:(NSURLConnection *)conn {
 	self.connection = nil;
 	
 	[delegate unrest:self didFinishWithResponse:responseData];
@@ -212,8 +226,7 @@
 	self.responseData = nil;
 }
 
-- (void)connection:(NSURLConnection *)conn didFailWithError:(NSError *)error
-{
+- (void)connection:(NSURLConnection *)conn didFailWithError:(NSError *)error {
 	self.responseData = nil;
 	self.connection = nil;
 	
@@ -224,8 +237,7 @@
 #pragma mark -
 #pragma mark Memory management
 
-- (void) dealloc
-{
+- (void) dealloc {
 	self.urlString = nil;
 	self.multiparts = nil;
 	
