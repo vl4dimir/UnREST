@@ -164,6 +164,7 @@
 				GCC_PREFIX_HEADER = UnREST_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = UnREST;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -178,6 +179,7 @@
 				GCC_PREFIX_HEADER = UnREST_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = UnREST;
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
@@ -191,7 +193,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.1;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -204,7 +206,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
